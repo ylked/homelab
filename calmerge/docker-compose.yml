@@ -1,0 +1,9 @@
+services:
+  calmerge:
+    image: ghcr.io/torchbox/calmerge:latest
+    container_name: calmerge
+    restart: unless-stopped
+    ports:
+      - ${CALMERGE_PORT:-3000}:3000
+    volumes:
+      - ${CALMERGE_APP_DIR:-.}/calendars.toml:/app/calendars.toml:ro
