@@ -1,0 +1,27 @@
+services:
+  grist:
+    image: gristlabs/grist
+    container_name: grist
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file:
+      ${GRIST_ENV_FILE:-.env}
+    volumes:
+      - ${GRIST_APP_DIR:-.}/data:/persist
+    ports:
+      - 8484:8484
+
+  redis:
+    image: redis:7-alpine
+    container_name: grist-redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel notice
+    volumes:
+      - ${GRIST_APP_DIR:-.}/redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
