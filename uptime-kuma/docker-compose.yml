@@ -5,5 +5,6 @@ services:
     restart: unless-stopped
     volumes:
       - ${UPTIME_KUMA_APP_DIR:-.}/data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - ${UPTIME_KUMA_PORT:-3001}:3001
