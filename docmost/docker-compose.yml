@@ -9,18 +9,18 @@ services:
       - ${DOCMOST_PORT:-3000}:3000
     restart: unless-stopped
     volumes:
-      - ${APP_DIR:-.}/data/docmost:/app/data/storage
+      - ${APP_DIR:-.}/docmost:/app/data/storage
 
   db:
     image: postgres:18
     env_file: ${ENV_FILE:-.env}
     restart: unless-stopped
     volumes:
-      - ${APP_DIR:-.}/data/db:/var/lib/postgresql
+      - ${APP_DIR:-.}/db:/var/lib/postgresql
 
   redis:
     image: redis:8
     command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
     restart: unless-stopped
     volumes:
-      - ${APP_DIR:-.}/data/redis:/data
+      - ${APP_DIR:-.}/redis:/data
