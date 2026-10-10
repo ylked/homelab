@@ -1,0 +1,22 @@
+services:
+  vikunja:
+    image: vikunja/vikunja:2.7.0
+    env_file: ${ENV_FILE:-.env}
+    ports:
+      - 3456:3456
+    volumes:
+      - ${APP_DIR:-.}/files:/app/vikunja/files
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+  db:
+    image: postgres:18
+    env_file: ${ENV_FILE:-.env}
+    volumes:
+      - ${APP_DIR:-.}/db:/var/lib/postgresql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U $$POSTGRES_USER"]
+      interval: 2s
+      start_period: 30s
